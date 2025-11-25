@@ -2,13 +2,13 @@
 
 ## Project Structure
 
--   Please format the code at the end using the `Prettier` package.
-    -   Please use the `"prettier.printWidth": 8000` option.
+- Please format the code at the end using the `Prettier` package.
+    - Please use the `"prettier.printWidth": 8000` option.
 
 ## Coding Guidelines
 
--   Use 4 spaces for indentation.
--   Use UTF-8 encoding for all source files.
+- Use 4 spaces for indentation.
+- Use UTF-8 encoding for all source files.
 
 ## Response
 
