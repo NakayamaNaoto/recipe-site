@@ -1,16 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
-import { recipes } from "../data/recipes";
 
 const SiteLayout = () => {
-    const detailLink = recipes.length > 0 ? `/recipe/${recipes[0].id}` : "/";
-    const quickLinks = [
-        { path: "/", label: "Home" },
-        { path: detailLink, label: "Recipe Detail" },
-        { path: "/request", label: "Request" },
-        { path: "/about", label: "About" },
-        { path: "/contact", label: "Contact" },
-    ];
-
     return (
         <div className="site-shell">
             <header className="site-header">
@@ -20,15 +10,6 @@ const SiteLayout = () => {
                     </Link>
                     <p>AI発案レシピの実験室から、毎日の食卓へ。</p>
                 </div>
-                <nav className="quick-links" aria-label="Quick Links">
-                    <ul>
-                        {quickLinks.map((link) => (
-                            <li key={link.path}>
-                                <Link to={link.path}>{link.label}</Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
                 <div className="site-header__cta">
                     <Link to="/request" className="primary-link">
                         レシピを依頼
