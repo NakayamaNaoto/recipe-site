@@ -1,15 +1,18 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { recipes } from "../data/recipes";
 import { tagSynonyms } from "../data/tagSynonyms";
 
 const normalizeKeyword = (value: string) => value.trim().toLowerCase();
+const PAGE_SIZE = 12;
 
 const HomePage = () => {
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
     const [tagQuery, setTagQuery] = useState("");
+    const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
     const navigate = useNavigate();
+    const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
     const allTags = useMemo(() => Array.from(new Set(recipes.flatMap((recipe) => recipe.tags ?? []).filter((tag) => tag && tag.trim().length > 0))), []);
     const tagKeywords = useMemo(() => {
@@ -32,6 +35,28 @@ const HomePage = () => {
     }, [allTags, tagKeywords, tagQuery]);
 
     const filteredRecipes = useMemo(() => (selectedTag ? recipes.filter((recipe) => (recipe.tags ?? []).includes(selectedTag)) : recipes), [selectedTag]);
+    const visibleRecipes = useMemo(() => filteredRecipes.slice(0, visibleCount), [filteredRecipes, visibleCount]);
+
+    const handleSelectTag = (tag: string | null) => {
+        setSelectedTag(tag);
+        setVisibleCount(PAGE_SIZE);
+    };
+
+    useEffect(() => {
+        if (!loadMoreRef.current || visibleCount >= filteredRecipes.length) {
+            return;
+        }
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries.some((entry) => entry.isIntersecting)) {
+                    setVisibleCount((prev) => Math.min(filteredRecipes.length, prev + PAGE_SIZE));
+                }
+            },
+            { root: null, rootMargin: "200px 0px", threshold: 0 },
+        );
+        observer.observe(loadMoreRef.current);
+        return () => observer.disconnect();
+    }, [filteredRecipes.length, visibleCount]);
 
     const handleCardClick = (recipeId: string) => {
         navigate(`/recipe/${recipeId}`);
@@ -87,13 +112,13 @@ const HomePage = () => {
                     <input type="search" value={tagQuery} onChange={(event) => setTagQuery(event.target.value)} placeholder="タグを検索..." aria-label="タグを検索" />
                 </div>
                 <div className="tag-list">
-                    <button type="button" className={`tag-chip ${selectedTag === null ? "is-selected" : ""}`} aria-pressed={selectedTag === null} onClick={() => setSelectedTag(null)}>
+                    <button type="button" className={`tag-chip ${selectedTag === null ? "is-selected" : ""}`} aria-pressed={selectedTag === null} onClick={() => handleSelectTag(null)}>
                         すべて
                     </button>
                     {visibleTags.map((tag) => {
                         const isSelected = selectedTag === tag;
                         return (
-                            <button key={tag} type="button" className={`tag-chip ${isSelected ? "is-selected" : ""}`} aria-pressed={isSelected} onClick={() => setSelectedTag(isSelected ? null : tag)}>
+                            <button key={tag} type="button" className={`tag-chip ${isSelected ? "is-selected" : ""}`} aria-pressed={isSelected} onClick={() => handleSelectTag(isSelected ? null : tag)}>
                                 #{tag}
                             </button>
                         );
@@ -105,7 +130,7 @@ const HomePage = () => {
                 {filteredRecipes.length === 0 ? (
                     <p className="recipe-empty">該当するレシピが見つかりませんでした。</p>
                 ) : (
-                    filteredRecipes.map((recipe) => (
+                    visibleRecipes.map((recipe) => (
                         <article key={recipe.id} className="recipe-card" role="link" tabIndex={0} onClick={() => handleCardClick(recipe.id)} onKeyDown={(event) => handleCardKeyDown(event, recipe.id)}>
                             <div className="recipe-card__meta">
                                 <span className="meta-pill meta-pill--time">
@@ -136,6 +161,7 @@ const HomePage = () => {
                         </article>
                     ))
                 )}
+                {visibleCount < filteredRecipes.length ? <div ref={loadMoreRef} className="load-more-sentinel" aria-hidden="true" /> : null}
             </section>
         </div>
     );

@@ -369,6 +369,11 @@
     gap: 1.5rem;
 }
 
+.load-more-sentinel {
+    height: 1px;
+    width: 100%;
+}
+
 .recipe-card {
     background: #ffffff;
     border-radius: 1.25rem;

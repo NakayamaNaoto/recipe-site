@@ -1,6 +1,9 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 
 const SiteLayout = () => {
+    const location = useLocation();
+    const shouldShowFooter = location.pathname !== "/";
+
     return (
         <div className="site-shell">
             <header className="site-header">
@@ -15,7 +18,7 @@ const SiteLayout = () => {
                         レシピを依頼
                     </Link>
                     <Link to="/contact" className="ghost-link">
-                        問い合わせ
+                        お問い合わせ
                     </Link>
                 </div>
             </header>
@@ -24,21 +27,23 @@ const SiteLayout = () => {
                 <Outlet />
             </main>
 
-            <footer className="site-footer">
-                <div className="footer-cta">
-                    <h2>リクエストやお問い合わせをいつでも歓迎しています</h2>
-                    <p>使い切りたい食材やアレルギー対応など、フォームから気軽にお知らせください。AIシェフが次のレシピ案を考えます。</p>
-                    <div className="footer-cta__actions">
-                        <Link to="/request" className="primary-link">
-                            リクエストフォームへ
-                        </Link>
-                        <Link to="/contact" className="ghost-link">
-                            お問い合わせへ
-                        </Link>
+            {shouldShowFooter ? (
+                <footer className="site-footer">
+                    <div className="footer-cta">
+                        <h2>リクエストやお問い合わせをいつでも歓迎しています</h2>
+                        <p>使ってみたい素材やアレルギー対応など、フォームから気軽にお知らせください。AIシェフが次のレシピ案を考えます。</p>
+                        <div className="footer-cta__actions">
+                            <Link to="/request" className="primary-link">
+                                リクエストフォームへ
+                            </Link>
+                            <Link to="/contact" className="ghost-link">
+                                お問い合わせへ
+                            </Link>
+                        </div>
                     </div>
-                </div>
-                <p className="footer-note">© {new Date().getFullYear()} AI Recipe Studio</p>
-            </footer>
+                    <p className="footer-note">© {new Date().getFullYear()} AI Recipe Studio</p>
+                </footer>
+            ) : null}
         </div>
     );
 };
