@@ -1,19 +1,33 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { recipes } from "../data/recipes";
+import { tagSynonyms } from "../data/tagSynonyms";
+
+const normalizeKeyword = (value: string) => value.trim().toLowerCase();
 
 const HomePage = () => {
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
     const [tagQuery, setTagQuery] = useState("");
 
     const allTags = useMemo(() => Array.from(new Set(recipes.flatMap((recipe) => recipe.tags ?? []).filter((tag) => tag && tag.trim().length > 0))), []);
+    const tagKeywords = useMemo(() => {
+        const map = new Map<string, string[]>();
+        allTags.forEach((tag) => {
+            const synonyms = tagSynonyms[tag] ?? [];
+            map.set(tag, [tag, ...synonyms]);
+        });
+        return map;
+    }, [allTags]);
     const visibleTags = useMemo(() => {
-        const query = tagQuery.trim().toLowerCase();
+        const query = normalizeKeyword(tagQuery);
         if (!query) {
             return allTags;
         }
-        return allTags.filter((tag) => tag.toLowerCase().includes(query));
-    }, [allTags, tagQuery]);
+        return allTags.filter((tag) => {
+            const keywords = tagKeywords.get(tag) ?? [tag];
+            return keywords.some((keyword) => normalizeKeyword(keyword).includes(query));
+        });
+    }, [allTags, tagKeywords, tagQuery]);
 
     const filteredRecipes = useMemo(() => (selectedTag ? recipes.filter((recipe) => (recipe.tags ?? []).includes(selectedTag)) : recipes), [selectedTag]);
 
