@@ -120,6 +120,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
+    background: linear-gradient(180deg, #ffffff 0%, #f4f4f8 40%, #fdf9f4 100%);
 }
 
 .site-main > * {
