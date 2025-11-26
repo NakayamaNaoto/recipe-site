@@ -32,7 +32,6 @@ const RecipeDetailPage = () => {
                 </div>
                 <header className="detail-hero">
                     <div>
-                        <p className="eyebrow">Recipe #{recipe.id}</p>
                         <h1>{recipe.title}</h1>
                         <p className="detail-description">{recipe.description}</p>
                         <div className="detail-meta">
@@ -43,14 +42,6 @@ const RecipeDetailPage = () => {
                                     #{tag}
                                 </span>
                             ))}
-                        </div>
-                        <div className="detail-cta">
-                            <a className="detail-button detail-button--primary" href="#steps">
-                                作り方を見る
-                            </a>
-                            <button type="button" className="detail-button detail-button--ghost">
-                                買い物リストを準備
-                            </button>
                         </div>
                     </div>
                 </header>
