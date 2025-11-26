@@ -31,14 +31,7 @@ const HomePage = () => {
 
     const filteredRecipes = useMemo(() => (selectedTag ? recipes.filter((recipe) => (recipe.tags ?? []).includes(selectedTag)) : recipes), [selectedTag]);
 
-    const averageTime = recipes.length
-        ? Math.round(
-              recipes.reduce((total, recipe) => {
-                  const minutes = parseInt(recipe.time.replace(/[^0-9]/g, ""), 10);
-                  return total + (Number.isNaN(minutes) ? 0 : minutes);
-              }, 0) / recipes.length,
-          )
-        : 0;
+    const averageTime = recipes.length ? Math.round(recipes.reduce((total, recipe) => total + recipe.time, 0) / recipes.length) : 0;
 
     return (
         <div className="page">
@@ -102,7 +95,7 @@ const HomePage = () => {
                     filteredRecipes.map((recipe) => (
                         <article key={recipe.id} className="recipe-card">
                             <div className="recipe-card__meta">
-                                <span>{recipe.time}</span>
+                                <span>{recipe.time}分</span>
                                 <span>{recipe.difficulty}</span>
                             </div>
                             <h3>{recipe.title}</h3>

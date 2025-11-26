@@ -35,7 +35,7 @@ const RecipeDetailPage = () => {
                         <h1>{recipe.title}</h1>
                         <p className="detail-description">{recipe.description}</p>
                         <div className="detail-meta">
-                            <span className="pill">{recipe.time}</span>
+                            <span className="pill">{recipe.time}分</span>
                             <span className="pill">{recipe.difficulty}</span>
                             {recipe.tags?.map((tag) => (
                                 <span key={tag} className="pill pill--muted">
