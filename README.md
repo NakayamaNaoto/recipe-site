@@ -8,21 +8,21 @@ Google アナリティクス（GA4）のイベント計測やページ遷移分�
 
 # 🚀 技術スタック
 
--   React 18
--   TypeScript
--   Vite
--   React Router v6
--   Google Analytics（GA4）
--   Netlify 対応
+- React 18
+- TypeScript
+- Vite
+- React Router v6
+- Google Analytics（GA4）
+- Netlify 対応
 
 # 🌐 サイト構成（ルーティング）
 
 ```
-/ … レシピ一覧ページ
-├── /recipe/:id … レシピ詳細ページ
-├── /request … レシピリクエストフォーム
-├── /about … サイトの説明
-└── /contact … お問い合わせ
+/               # レシピ一覧ページ
+├── /recipe/:id # レシピ詳細ページ
+├── /request    # レシピリクエストフォーム
+├── /about      # サイトの説明
+└── /contact    # お問い合わせ
 ```
 
 # 📁 ディレクトリ構成（Vite + React）
@@ -98,14 +98,14 @@ export const recipes: Recipe[] = [
 
 ## ✔ 一覧ページ /
 
--   recipes.map() ですべてのレシピをカードとして表示
--   カードクリックで /recipe/:id へ遷移
+- recipes.map() ですべてのレシピをカードとして表示
+- カードクリックで /recipe/:id へ遷移
 
 ## ✔ 詳細ページ /recipe/:id
 
--   useParams() で URL から id を取得
--   recipes.find() で該当レシピを取得
--   タイトル・説明・材料・手順を表示
+- useParams() で URL から id を取得
+- recipes.find() で該当レシピを取得
+- タイトル・説明・材料・手順を表示
 
 イメージ：
 
