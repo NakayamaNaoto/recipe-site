@@ -4,8 +4,17 @@ import { recipes } from "../data/recipes";
 
 const HomePage = () => {
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
+    const [tagQuery, setTagQuery] = useState("");
 
     const allTags = useMemo(() => Array.from(new Set(recipes.flatMap((recipe) => recipe.tags ?? []).filter((tag) => tag && tag.trim().length > 0))), []);
+    const visibleTags = useMemo(() => {
+        const query = tagQuery.trim().toLowerCase();
+        if (!query) {
+            return allTags;
+        }
+        return allTags.filter((tag) => tag.toLowerCase().includes(query));
+    }, [allTags, tagQuery]);
+
     const filteredRecipes = useMemo(() => (selectedTag ? recipes.filter((recipe) => (recipe.tags ?? []).includes(selectedTag)) : recipes), [selectedTag]);
 
     const averageTime = recipes.length
@@ -54,11 +63,14 @@ const HomePage = () => {
             <section className="tags-panel" aria-label="レシピのタグ一覧">
                 <h2>キーワードで探す</h2>
                 <p>気分やシーンに合わせてタグを選べます。得意な味や調理法を見つけてください。</p>
+                <div className="tag-search">
+                    <input type="search" value={tagQuery} onChange={(event) => setTagQuery(event.target.value)} placeholder="タグを検索..." aria-label="タグを検索" />
+                </div>
                 <div className="tag-list">
                     <button type="button" className={`tag-chip ${selectedTag === null ? "is-selected" : ""}`} aria-pressed={selectedTag === null} onClick={() => setSelectedTag(null)}>
                         すべて
                     </button>
-                    {allTags.map((tag) => {
+                    {visibleTags.map((tag) => {
                         const isSelected = selectedTag === tag;
                         return (
                             <button key={tag} type="button" className={`tag-chip ${isSelected ? "is-selected" : ""}`} aria-pressed={isSelected} onClick={() => setSelectedTag(isSelected ? null : tag)}>
