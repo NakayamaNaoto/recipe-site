@@ -21,7 +21,6 @@ const SiteLayout = () => {
                     <p>AI発案レシピの実験室から、毎日の食卓へ。</p>
                 </div>
                 <nav className="quick-links" aria-label="Quick Links">
-                    <p className="quick-links__title">Quick Links</p>
                     <ul>
                         {quickLinks.map((link) => (
                             <li key={link.path}>
