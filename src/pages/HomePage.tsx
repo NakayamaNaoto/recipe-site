@@ -61,7 +61,7 @@ const HomePage = () => {
                     {allTags.map((tag) => {
                         const isSelected = selectedTag === tag;
                         return (
-                            <button key={tag} type="button" className={`tag-chip ${isSelected ? "is-selected" : ""}`} aria-pressed={isSelected} onClick={() => setSelectedTag(tag)}>
+                            <button key={tag} type="button" className={`tag-chip ${isSelected ? "is-selected" : ""}`} aria-pressed={isSelected} onClick={() => setSelectedTag(isSelected ? null : tag)}>
                                 #{tag}
                             </button>
                         );
