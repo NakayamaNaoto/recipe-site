@@ -313,6 +313,20 @@
     padding: 0.4rem 0.9rem;
     border-radius: 999px;
     font-size: 0.9rem;
+    border: 1px solid gray;
+    cursor: pointer;
+}
+
+.tag-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px rgba(108, 75, 39, 0.12);
+}
+
+.tag-chip.is-selected {
+    background: #1d1d1f;
+    color: #ffffff;
+    border-color: #1d1d1f;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
 }
 
 .recipe-grid {
