@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import type { KeyboardEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { recipes } from "../data/recipes";
 import { tagSynonyms } from "../data/tagSynonyms";
 
@@ -8,6 +9,7 @@ const normalizeKeyword = (value: string) => value.trim().toLowerCase();
 const HomePage = () => {
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
     const [tagQuery, setTagQuery] = useState("");
+    const navigate = useNavigate();
 
     const allTags = useMemo(() => Array.from(new Set(recipes.flatMap((recipe) => recipe.tags ?? []).filter((tag) => tag && tag.trim().length > 0))), []);
     const tagKeywords = useMemo(() => {
@@ -30,6 +32,17 @@ const HomePage = () => {
     }, [allTags, tagKeywords, tagQuery]);
 
     const filteredRecipes = useMemo(() => (selectedTag ? recipes.filter((recipe) => (recipe.tags ?? []).includes(selectedTag)) : recipes), [selectedTag]);
+
+    const handleCardClick = (recipeId: string) => {
+        navigate(`/recipe/${recipeId}`);
+    };
+
+    const handleCardKeyDown = (event: KeyboardEvent<HTMLElement>, recipeId: string) => {
+        if (event.key === "Enter" || event.key === " " || event.key === "Spacebar") {
+            event.preventDefault();
+            navigate(`/recipe/${recipeId}`);
+        }
+    };
 
     const averageTime = recipes.length ? Math.round(recipes.reduce((total, recipe) => total + recipe.time, 0) / recipes.length) : 0;
 
@@ -93,10 +106,16 @@ const HomePage = () => {
                     <p className="recipe-empty">該当するレシピが見つかりませんでした。</p>
                 ) : (
                     filteredRecipes.map((recipe) => (
-                        <article key={recipe.id} className="recipe-card">
+                        <article key={recipe.id} className="recipe-card" role="link" tabIndex={0} onClick={() => handleCardClick(recipe.id)} onKeyDown={(event) => handleCardKeyDown(event, recipe.id)}>
                             <div className="recipe-card__meta">
-                                <span>{recipe.time}分</span>
-                                <span>{recipe.difficulty}</span>
+                                <span className="meta-pill meta-pill--time">
+                                    <span aria-hidden="true">⏱</span>
+                                    <span>{recipe.time}分</span>
+                                </span>
+                                <span className="meta-pill meta-pill--difficulty">
+                                    <span aria-hidden="true">★</span>
+                                    <span>{recipe.difficulty}</span>
+                                </span>
                             </div>
                             <h3>{recipe.title}</h3>
                             <p className="recipe-card__description">{recipe.description}</p>
@@ -110,8 +129,9 @@ const HomePage = () => {
                                 </ul>
                             </div>
                             <div className="recipe-card__actions">
-                                <Link to={`/recipe/${recipe.id}`}>詳しく見る</Link>
-                                <button type="button">作ってみる</button>
+                                <Link to={`/recipe/${recipe.id}`} onClick={(event) => event.stopPropagation()}>
+                                    詳しく見る
+                                </Link>
                             </div>
                         </article>
                     ))
