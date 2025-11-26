@@ -323,10 +323,10 @@
 }
 
 .tag-chip.is-selected {
-    background: #1d1d1f;
+    background: #a05f26;
     color: #ffffff;
-    border-color: #1d1d1f;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+    border-color: #a05f26;
+    box-shadow: 0 12px 28px rgba(160, 95, 38, 0.18);
 }
 
 .recipe-grid {
