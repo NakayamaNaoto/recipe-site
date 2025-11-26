@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SiteLayout from "./components/SiteLayout";
+import ScrollToTop from "./components/ScrollToTop";
 import HomePage from "./pages/HomePage";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 import RequestPage from "./pages/RequestPage";
@@ -9,6 +10,7 @@ import ContactPage from "./pages/ContactPage";
 
 const App = () => (
     <BrowserRouter>
+        <ScrollToTop />
         <Routes>
             <Route element={<SiteLayout />}>
                 <Route path="/" element={<HomePage />} />
